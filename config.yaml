@@ -1,0 +1,82 @@
+# Data Pipeline Configuration
+pipeline:
+  name: "Document Dataset Generator"
+  version: "1.0.0"
+
+# Ollama Configuration
+ollama:
+  base_url: "http://localhost:11434"
+  model: "granite4"
+  timeout: 300
+  max_retries: 3
+
+# Sarvam AI Configuration
+sarvam:
+  api_key: "${SARVAM_API_KEY}" # Set this in your environment or .env file
+  model: "sarvam-translate:v1"
+  enabled: true
+  
+# PDF Processing Settings
+pdf:
+  max_pages: null  # null = process all pages
+  extract_images: false
+  ocr_enabled: true
+  min_text_length: 50
+  ocr_engine: "moondream"  # options: "qwen", "moondream"
+  force_ocr: true     # Set to true to skip PyMuPDF and use Vision model directly
+
+# Text Processing
+text:
+  chunk_size: 2500  # Approx 600 tokens
+  chunk_overlap: 600 # Approx 150 tokens
+  min_chunk_size: 200
+  max_chunk_size: 3000
+
+# Dataset Categories
+categories:
+  - "research_paper"
+  - "textbook"
+  - "technical_documentation"
+  - "tutorial"
+  - "reference_material"
+  - "general_knowledge"
+
+# Output Formats
+output:
+  formats:
+    - "jsonl"
+    - "csv"
+    - "huggingface"
+    - "sharegpt"
+  directory: "./datasets"
+  
+# Dataset Types to Generate
+dataset_types:
+  - name: "instruction_tuning"
+    description: "Question-Answer pairs for instruction tuning"
+    enabled: true
+  - name: "text_completion"
+    description: "Text completion/continuation data"
+    enabled: true
+  - name: "summarization"
+    description: "Document summarization pairs"
+    enabled: true
+  - name: "classification"
+    description: "Text classification with labels"
+    enabled: true
+  - name: "ner"
+    description: "Named Entity Recognition data"
+    enabled: false
+
+# Labeling Configuration
+labeling:
+  auto_detect_language: true
+  extract_keywords: true
+  extract_entities: true
+  sentiment_analysis: false
+  complexity_score: true
+
+# Logging
+logging:
+  level: "INFO"
+  file: "./logs/pipeline.log"
